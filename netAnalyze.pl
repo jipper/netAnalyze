@@ -8,7 +8,7 @@
 
 use Data::Dumper; 
 
-my @populate;
+my %populate;
 my @thread;
 my $thread_i = 0;
 my @struk =
@@ -32,6 +32,41 @@ my @struk =
 			  ]
 );
 
+sub fill_populate
+{
+	if(!$populate{$2})
+	{
+		$populate{$2} = 
+				{
+				 $1 => 
+					{ 						
+					$3 => 
+						{ 
+							$4 => $5 
+						} 							
+					}
+				};
+	}
+	elsif($populate{$2}{$1})
+	{
+		foreach(@{$populate[$2][$1]})
+		{
+			if(!$_->{$3})
+			{
+				
+			}
+		}
+		my @tmp = ( [$3 => { $4 => $5 } ]);
+
+		push ( @{$populate{$2}{$1}}, @tmp);
+	}
+	else
+	{
+		
+	}
+	
+}
+
 sub populate_sniff
 {
 	print "starting..\n";
@@ -43,6 +78,7 @@ sub populate_sniff
 		if($_ =~ /([A-Z])\s?(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}):(\d{1,5}) -> (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}):(\d{1,5})/)
 		{
 			print $1.'--'.$2.'--'.$3.'--'.$4.'--'.$5."\n";
+
 		}
 	}
 }
@@ -52,9 +88,7 @@ sub console
 	my %cmd = 
 	(
 		   "populate" =>  {
-					"sniff" => \&populate_sniff,
-					"scan"  => \&populate_scan,
-					"all" 	=> \&populate_all
+					"sniff" => \&populate_sniff
 				  }
 	
 	);
